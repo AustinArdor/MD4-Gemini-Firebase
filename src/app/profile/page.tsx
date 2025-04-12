@@ -49,7 +49,7 @@ const ProfilePage: React.FC = () => {
                     {/* Profile Banner and Picture */}
                     <div className="relative">
                         <img src={bannerImage} alt="Profile Banner" className="w-full h-72 object-cover rounded-md" />
-                        <Avatar className="absolute left-4 bottom-0 transform translate-y-1/2">
+                        <Avatar className="absolute left-4 bottom-0 transform translate-y-1/2" style={{ width: '120px', height: '120px' }}>
                             <AvatarImage src={profileImage} alt="Profile Picture" />
                             <AvatarFallback>{displayName.substring(0, 2)}</AvatarFallback>
                         </Avatar>
