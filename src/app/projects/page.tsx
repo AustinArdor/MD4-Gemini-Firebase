@@ -1,5 +1,3 @@
-'use client';
-
 import React, {useState, useEffect} from 'react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
@@ -449,14 +447,14 @@ const ProjectPage: React.FC = () => {
               <Button variant="outline" size="icon" onClick={goToNext90Days} disabled={new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000)) > new Date()}><ChevronRight /></Button>
           </div>
           <div className="grid grid-cols-15 gap-1">
-            {days.map((day) => {
+            {days.map((day, index) => {
               const dateKey = day.toISOString().split('T')[0];
               const contributionCount = contributions[dateKey] || 0;
               const contributionShade = calculateContributionShade(contributionCount);
 
               return (
                 <div
-                  key={dateKey}
+                  key={`${dateKey}-${index}`} // Ensure unique key by adding index
                   className="w-6 h-6 rounded-sm"
                   style={{backgroundColor: contributionShade}}
                   title={`${dateKey}: ${contributionCount} contributions`}
