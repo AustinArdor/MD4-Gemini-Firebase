@@ -152,22 +152,7 @@ const ProfilePage: React.FC = () => {
                         </div>
 
                         {/* Genre Bubbles */}
-                        <div className="flex flex-wrap justify-start mt-4">
-                            {genres.map(genre => (
-                                <Button
-                                    key={genre}
-                                    variant="outline"
-                                    className={cn(
-                                        "rounded-full m-1 text-sm",
-                                        selectedGenres.includes(genre) ? "bg-accent text-accent-foreground" : ""
-                                    )}
-                                    onClick={() => handleGenreSelect(genre)}
-                                    disabled={!isEditing}
-                                >
-                                    {genre}
-                                </Button>
-                            ))}
-                        </div>
+
                     </div>
 
                     {/* Tabs for Biography, Projects, Social Feed */}
