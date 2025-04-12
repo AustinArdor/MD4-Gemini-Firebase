@@ -73,6 +73,19 @@ const SocialFeed = () => {
   const [commentInput, setCommentInput] = useState<{ [postId: string]: string }>({});
   const [replyInput, setReplyInput] = useState<{ [commentId: string]: string }>({});
   const [likedComments, setLikedComments] = useState<Set<string>>(new Set());
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+
+    const handleLikePost = (postId: string) => {
+        setLikedPosts(prev => {
+            const newLikedPosts = new Set(prev);
+            if (newLikedPosts.has(postId)) {
+                newLikedPosts.delete(postId);
+            } else {
+                newLikedPosts.add(postId);
+            }
+            return newLikedPosts;
+        });
+    };
 
   const handlePublishPost = () => {
     if (newPostContent.trim() !== '') {
@@ -184,15 +197,15 @@ const SocialFeed = () => {
                     <p>{post.content}</p>
                   )}
                   <div className="mt-4 flex items-center space-x-4">
-                    <Button variant="ghost"><MessageSquare /></Button>
-                    <Button variant="ghost"><Share2 /></Button>
                     <Button
                       variant="ghost"
-                      onClick={() => handleLikeComment(post.id)}
-                      className={likedComments.has(post.id) ? 'text-red-500' : ''}
+                      onClick={() => handleLikePost(post.id)}
+                      className={likedPosts.has(post.id) ? 'text-red-500' : ''}
                     >
-                      <Heart fill={likedComments.has(post.id) ? 'red' : 'none'} />
+                      <Heart fill={likedPosts.has(post.id) ? 'red' : 'none'} />
                     </Button>
+                    <Button variant="ghost"><MessageSquare /></Button>
+                    <Button variant="ghost"><Share2 /></Button>
                   </div>
 
                   {/* Comments Section */}
