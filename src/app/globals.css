@@ -45,6 +45,20 @@ body {
     --calm-blue: 217 36% 32%;
     --light-gray: 0 0% 84%;
     --gold: 43 70% 64%;
+
+    /* Project colors */
+    --project-card-background: 220 10% 98%;
+    --project-card-foreground: 220 20% 20%;
+    --project-status-inprogress: 50 70% 50%; /* Green */
+    --project-status-upcoming: 43 70% 64%; /* Gold */
+    --project-status-completed: 220 8% 45%; /* Muted */
+
+    /* Contribution Tracker Colors */
+    --contribution-0: 0 0% 90%;         /* Grey */
+    --contribution-1-5: 120 50% 80%;   /* Light Green */
+    --contribution-5-10: 120 50% 60%;  /* Green */
+    --contribution-10-15: 120 50% 40%; /* Dark Green */
+    --contribution-15-plus: 120 50% 20%; /* Very Dark Green */
   }
   .dark {
     --background: 220 20% 20%;
@@ -79,6 +93,20 @@ body {
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Dark Mode Project Colors */
+    --project-card-background: 220 10% 25%;
+    --project-card-foreground: 0 0% 98%;
+    --project-status-inprogress: 120 50% 50%; /* Green */
+    --project-status-upcoming: 43 70% 64%; /* Gold */
+    --project-status-completed: 220 8% 65%; /* Muted */
+
+    /* Dark Mode Contribution Tracker Colors */
+    --contribution-0: 0 0% 20%;         /* Grey */
+    --contribution-1-5: 120 50% 40%;   /* Light Green */
+    --contribution-5-10: 120 50% 30%;  /* Green */
+    --contribution-10-15: 120 50% 20%; /* Dark Green */
+    --contribution-15-plus: 120 50% 10%; /* Very Dark Green */
   }
 }
 
@@ -90,5 +118,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-

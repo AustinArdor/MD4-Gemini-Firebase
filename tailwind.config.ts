@@ -59,6 +59,19 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+        project: {
+          card: {
+            DEFAULT: 'hsl(var(--project-card-background))',
+            foreground: 'hsl(var(--project-card-foreground))',
+          }
+        },
+  			contribution: {
+  				'0': 'hsl(var(--contribution-0))',
+  				'1-5': 'hsl(var(--contribution-1-5))',
+  				'5-10': 'hsl(var(--contribution-5-10))',
+  				'10-15': 'hsl(var(--contribution-10-15))',
+  				'15+': 'hsl(var(--contribution-15-plus))',
   			}
   		},
   		borderRadius: {
