@@ -432,7 +432,7 @@ const ProjectPage: React.FC = () => {
           </div>
         )}
 
-        <div className="mt-12 w-full">
+       <div className="mt-12 w-full">
           <h2 className="text-2xl font-bold text-calm-blue mb-4">Contribution Tracker</h2>
 
           <div className="flex justify-center items-center mb-2">
@@ -440,21 +440,23 @@ const ProjectPage: React.FC = () => {
               <h3 className="mx-4 text-lg font-semibold">{(new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000))).toLocaleDateString('en-CA')} - {currentDate.toLocaleDateString('en-CA')}</h3>
               <Button variant="outline" size="icon" onClick={goToNext90Days} disabled={new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000)) > new Date()}><ChevronRight /></Button>
           </div>
-          <div className="grid grid-cols-15 gap-1">
-            {days.map((day, index) => {
-              const dateKey = format(day, 'yyyy-MM-dd');
-              const contributionCount = contributions[dateKey] || 0;
-              const contributionShade = calculateContributionShade(contributionCount);
+          <div className="bg-light-gray p-2 rounded-md">
+            <div className="flex gap-1">
+              {days.map((day, index) => {
+                const dateKey = format(day, 'yyyy-MM-dd');
+                const contributionCount = contributions[dateKey] || 0;
+                const contributionShade = calculateContributionShade(contributionCount);
 
-              return (
-                <div
-                  key={dateKey}
-                  className="w-6 h-6 rounded-sm"
-                  style={{backgroundColor: contributionShade}}
-                  title={`${dateKey}: ${contributionCount} contributions`}
-                />
-              );
-            })}
+                return (
+                  <div
+                    key={`${dateKey}-${index}`}
+                    className="w-6 h-6 rounded-sm"
+                    style={{backgroundColor: contributionShade}}
+                    title={`${dateKey}: ${contributionCount} contributions`}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
         <div className="mt-6 flex items-center space-x-4">
