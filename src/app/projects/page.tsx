@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
@@ -19,6 +19,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Switch} from "@/components/ui/switch";
 import {toast} from '@/hooks/use-toast';
+import { format } from 'date-fns';
 
 // Define Project Type
 interface Project {
@@ -70,35 +71,21 @@ const ProjectPage: React.FC = () => {
     return 'var(--contribution-15-plus)';
   };
 
-  useEffect(() => {
-    // Initialize projects (for development, load from local storage later)
-    setProjects([
-      {
-        id: '1',
-        title: 'The Dragon and the Stone',
-        summary: 'A young dragon discovers an ancient stone with magical powers.',
-        status: 'In Progress',
-        wordCount: 40000,
-        wordCountGoal: 100000,
-      },
-      {
-        id: '2',
-        title: 'Echoes of the Past',
-        summary: 'A historian uncovers a hidden city buried beneath the sands.',
-        status: 'Upcoming',
-        wordCount: 15000,
-        wordCountGoal: 135000,
-      },
-      {
-        id: '3',
-        title: 'The Last Starfarer',
-        summary: 'In a dying universe, one pilot searches for a new home for humanity.',
-        status: 'Completed',
-        wordCount: 150000,
-        wordCountGoal: 150000,
-      },
-    ]);
+  const loadProjects = useCallback(() => {
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      setProjects(JSON.parse(storedProjects));
+    }
   }, []);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
+
+  useEffect(() => {
+    localStorage.setItem('projects', JSON.stringify(projects));
+    updateContributions();
+  }, [projects]);
 
   const handleCreateProject = () => {
     if (projects.length < maxProjects) {
@@ -134,6 +121,20 @@ const ProjectPage: React.FC = () => {
   const handleDocumentSelect = (projectId: string, documentId: string) => {
       handleProjectUpdate(projectId, {googleDocId: documentId});
   };
+
+    const updateContributions = useCallback(() => {
+        const newContributions: {[key: string]: number} = {};
+
+        projects.forEach(project => {
+            const dateKey = format(new Date(), 'yyyy-MM-dd');
+            if (project.googleDocId) {
+                newContributions[dateKey] = (newContributions[dateKey] || 0) + 1;
+            }
+        });
+
+        setContributions(newContributions);
+    }, [projects]);
+
 
   const today = new Date();
   const days = [];
@@ -293,7 +294,12 @@ const ProjectPage: React.FC = () => {
                           type="number"
                           id="wordcount"
                           value={project.wordCount.toString()}
-                          onChange={(e) => handleProjectUpdate(project.id, {wordCount: Number(e.target.value)})}
+                          onChange={(e) => {
+                              const newWordCount = Number(e.target.value);
+                              handleProjectUpdate(project.id, { wordCount: newWordCount });
+                              const dateKey = format(new Date(), 'yyyy-MM-dd');
+                              setContributions(prev => ({ ...prev, [dateKey]: (prev[dateKey] || 0) + 1 }));
+                          }}
                         />
                       </div>
 
@@ -436,13 +442,13 @@ const ProjectPage: React.FC = () => {
           </div>
           <div className="grid grid-cols-15 gap-1">
             {days.map((day, index) => {
-              const dateKey = day.toISOString().split('T')[0];
+              const dateKey = format(day, 'yyyy-MM-dd');
               const contributionCount = contributions[dateKey] || 0;
               const contributionShade = calculateContributionShade(contributionCount);
 
               return (
                 <div
-                  key={`${dateKey}-${index}`}
+                  key={dateKey}
                   className="w-6 h-6 rounded-sm"
                   style={{backgroundColor: contributionShade}}
                   title={`${dateKey}: ${contributionCount} contributions`}
