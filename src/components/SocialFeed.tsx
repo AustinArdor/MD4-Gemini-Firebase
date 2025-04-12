@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface Post {
   id: string;
@@ -73,19 +74,19 @@ const SocialFeed = () => {
   const [commentInput, setCommentInput] = useState<{ [postId: string]: string }>({});
   const [replyInput, setReplyInput] = useState<{ [commentId: string]: string }>({});
   const [likedComments, setLikedComments] = useState<Set<string>>(new Set());
-    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
 
-    const handleLikePost = (postId: string) => {
-        setLikedPosts(prev => {
-            const newLikedPosts = new Set(prev);
-            if (newLikedPosts.has(postId)) {
-                newLikedPosts.delete(postId);
-            } else {
-                newLikedPosts.add(postId);
-            }
-            return newLikedPosts;
-        });
-    };
+  const handleLikePost = (postId: string) => {
+    setLikedPosts(prev => {
+      const newLikedPosts = new Set(prev);
+      if (newLikedPosts.has(postId)) {
+        newLikedPosts.delete(postId);
+      } else {
+        newLikedPosts.add(postId);
+      }
+      return newLikedPosts;
+    });
+  };
 
   const handlePublishPost = () => {
     if (newPostContent.trim() !== '') {
@@ -176,11 +177,15 @@ const SocialFeed = () => {
             {posts.map((post) => (
               <Card key={post.id} className="mb-4">
                 <CardHeader className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
-                    <AvatarFallback>{post.author.name.substring(0, 2)}</AvatarFallback>
-                  </Avatar>
-                  <CardTitle>{post.author.name}</CardTitle>
+                  <Link href="/profile">
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+                      <AvatarFallback>{post.author.name.substring(0, 2)}</AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <Link href="/profile">
+                    <CardTitle className="cursor-pointer">{post.author.name}</CardTitle>
+                  </Link>
                 </CardHeader>
                 <CardContent>
                   {post.type === 'project' ? (
