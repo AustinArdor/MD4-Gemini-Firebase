@@ -22,6 +22,7 @@ import {toast} from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription} from "@/components/ui/dialog";
 
 const ProfilePage: React.FC = () => {
     const [displayName, setDisplayName] = useState('John Doe');
@@ -32,6 +33,9 @@ const ProfilePage: React.FC = () => {
     const [following, setFollowing] = useState(456);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
+    const [followerListOpen, setFollowerListOpen] = useState(false);
+    const [followingListOpen, setFollowingListOpen] = useState(false);
+
     const genres = ['Fantasy', 'Sci-Fi', 'Horror', 'Mystery', 'Thriller', 'Romance', 'Historical Fiction'];
 
     const handleGenreSelect = (genre: string) => {
@@ -41,6 +45,10 @@ const ProfilePage: React.FC = () => {
             setSelectedGenres([...selectedGenres, genre]);
         }
     };
+
+    const followerUsers = Array.from({ length: followers }, (_, i) => `Follower ${i + 1}`);
+    const followingUsers = Array.from({ length: following }, (_, i) => `Following ${i + 1}`);
+
 
     return (
         <div className="flex flex-col items-center justify-start min-h-screen py-2">
@@ -53,6 +61,40 @@ const ProfilePage: React.FC = () => {
                             <AvatarImage src={profileImage} alt="Profile Picture" />
                             <AvatarFallback>{displayName.substring(0, 2)}</AvatarFallback>
                         </Avatar>
+                        {/* Follower/Following Counts */}
+                        <div className="absolute right-4 top-4 flex flex-col items-end bg-gray-200/50 backdrop-blur-sm rounded-md p-2">
+                            <Dialog open={followerListOpen} onOpenChange={setFollowerListOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="ghost" className="justify-end">
+                                        <span className="font-semibold">{followers}</span> Followers
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>Followers</DialogTitle>
+                                    <DialogDescription>
+                                        {followerUsers.map((user) => (
+                                            <div key={user} className="py-2">{user}</div>
+                                        ))}
+                                    </DialogDescription>
+                                </DialogContent>
+                            </Dialog>
+
+                            <Dialog open={followingListOpen} onOpenChange={setFollowingListOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="ghost" className="justify-end">
+                                        <span className="font-semibold">{following}</span> Following
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>Following</DialogTitle>
+                                    <DialogDescription>
+                                        {followingUsers.map((user) => (
+                                            <div key={user} className="py-2">{user}</div>
+                                        ))}
+                                    </DialogDescription>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                     </div>
 
                     {/* Profile Information */}
@@ -66,15 +108,6 @@ const ProfilePage: React.FC = () => {
                         </div>
 
 
-                        {/* Follower/Following Counts */}
-                        <div className="flex justify-start mt-2 space-x-4">
-                            <div>
-                                <span className="font-semibold">{followers}</span> Followers
-                            </div>
-                            <div>
-                                <span className="font-semibold">{following}</span> Following
-                            </div>
-                        </div>
 
                         {/* Genre Bubbles */}
                         <div className="flex flex-wrap justify-start mt-4">
