@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import { Heart, MessageSquare, Share2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface Post {
   id: string;
@@ -17,6 +19,27 @@ interface Post {
   bookTitle?: string;
   wordCountChange?: number;
   summary?: string;
+}
+
+interface Comment {
+  id: string;
+  author: {
+    name: string;
+    avatarUrl: string;
+  };
+  text: string;
+  likes: number;
+  replies: Reply[];
+}
+
+interface Reply {
+  id: string;
+  author: {
+    name: string;
+    avatarUrl: string;
+  };
+  text: string;
+  likes: number;
 }
 
 const DUMMY_POSTS: Post[] = [
@@ -46,6 +69,10 @@ const DUMMY_POSTS: Post[] = [
 const SocialFeed = () => {
   const [posts, setPosts] = useState<Post[]>(DUMMY_POSTS);
   const [newPostContent, setNewPostContent] = useState('');
+  const [comments, setComments] = useState<{ [postId: string]: Comment[] }>({});
+  const [commentInput, setCommentInput] = useState<{ [postId: string]: string }>({});
+  const [replyInput, setReplyInput] = useState<{ [commentId: string]: string }>({});
+  const [likedComments, setLikedComments] = useState<Set<string>>(new Set());
 
   const handlePublishPost = () => {
     if (newPostContent.trim() !== '') {
@@ -60,6 +87,66 @@ const SocialFeed = () => {
       };
       setPosts([newPost, ...posts]);
       setNewPostContent('');
+    }
+  };
+
+  const handleCommentSubmit = (postId: string) => {
+    const text = commentInput[postId]?.trim();
+    if (text) {
+      const newComment: Comment = {
+        id: String(Date.now()),
+        author: {
+          name: 'Current User', // TODO: Replace with actual user data
+          avatarUrl: 'https://picsum.photos/50/50', // TODO: Replace with actual user data
+        },
+        text: text,
+        likes: 0,
+        replies: [],
+      };
+      setComments(prev => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), newComment],
+      }));
+      setCommentInput(prev => ({ ...prev, [postId]: '' }));
+    }
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    setLikedComments(prev => {
+      const newLikedComments = new Set(prev);
+      if (newLikedComments.has(commentId)) {
+        newLikedComments.delete(commentId);
+      } else {
+        newLikedComments.add(commentId);
+      }
+      return newLikedComments;
+    });
+  };
+
+  const handleReplySubmit = (postId: string, commentId: string) => {
+    const text = replyInput[commentId]?.trim();
+    if (text) {
+      const newReply: Reply = {
+        id: String(Date.now()),
+        author: {
+          name: 'Current User', // TODO: Replace with actual user data
+          avatarUrl: 'https://picsum.photos/50/50', // TODO: Replace with actual user data
+        },
+        text: text,
+        likes: 0,
+      };
+
+      setComments(prev => {
+        const postComments = prev[postId] || [];
+        const updatedComments = postComments.map(comment => {
+          if (comment.id === commentId) {
+            return { ...comment, replies: [...comment.replies, newReply] };
+          }
+          return comment;
+        });
+        return { ...prev, [postId]: updatedComments };
+      });
+      setReplyInput(prev => ({ ...prev, [commentId]: '' }));
     }
   };
 
@@ -96,11 +183,111 @@ const SocialFeed = () => {
                   ) : (
                     <p>{post.content}</p>
                   )}
-                  <div className="mt-4">
-                    <Button variant="ghost">Comment</Button>
-                    <Button variant="ghost">Share</Button>
-                    <Button variant="ghost">Like</Button>
+                  <div className="mt-4 flex items-center space-x-4">
+                    <Button variant="ghost"><MessageSquare /></Button>
+                    <Button variant="ghost"><Share2 /></Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleLikeComment(post.id)}
+                      className={likedComments.has(post.id) ? 'text-red-500' : ''}
+                    >
+                      <Heart fill={likedComments.has(post.id) ? 'red' : 'none'} />
+                    </Button>
                   </div>
+
+                  {/* Comments Section */}
+                  <div className="mt-4">
+                    {comments[post.id]?.map((comment) => (
+                      <div key={comment.id} className="mb-2">
+                        <div className="flex items-center space-x-2">
+                          <Avatar className="h-6 w-6">
+                            <AvatarImage src={comment.author.avatarUrl} alt={comment.author.name} />
+                            <AvatarFallback>{comment.author.name.substring(0, 2)}</AvatarFallback>
+                          </Avatar>
+                          <div className="text-sm font-semibold">{comment.author.name}</div>
+                        </div>
+                        <div className="text-sm">{comment.text}</div>
+                        <div className="flex items-center space-x-4 mt-1">
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => handleLikeComment(comment.id)}
+                            className={likedComments.has(comment.id) ? 'text-red-500' : ''}
+                          >
+                            <Heart fill={likedComments.has(comment.id) ? 'red' : 'none'} className="h-3 w-3 mr-1" />
+                            Like
+                          </Button>
+                          <Button variant="ghost" size="xs">Reply</Button>
+                        </div>
+                        {/* Replies Section */}
+                        <div className="ml-6">
+                          {comment.replies.map(reply => (
+                            <div key={reply.id} className="mb-2">
+                              <div className="flex items-center space-x-2">
+                                <Avatar className="h-5 w-5">
+                                  <AvatarImage src={reply.author.avatarUrl} alt={reply.author.name} />
+                                  <AvatarFallback>{reply.author.name.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div className="text-xs font-semibold">{reply.author.name}</div>
+                              </div>
+                              <div className="text-xs">{reply.text}</div>
+                              <div className="flex items-center space-x-4 mt-1">
+                                <Button variant="ghost" size="xs">Like</Button>
+                              </div>
+                            </div>
+                          ))}
+                          {/* Reply Input */}
+                          <div className="flex items-center space-x-2 mt-2">
+                            <Avatar className="h-5 w-5">
+                              <AvatarImage src="https://picsum.photos/50/50" alt="Current User" /> {/* TODO: Replace with actual user data */}
+                              <AvatarFallback>CU</AvatarFallback>
+                            </Avatar>
+                            <Input
+                              type="text"
+                              placeholder="Add a reply..."
+                              value={replyInput[comment.id] || ''}
+                              onChange={(e) => setReplyInput(prev => ({ ...prev, [comment.id]: e.target.value }))}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleReplySubmit(post.id, comment.id);
+                                }
+                              }}
+                              className="text-xs"
+                            />
+                            <Button
+                              variant="ghost"
+                              size="xs"
+                              onClick={() => handleReplySubmit(post.id, comment.id)}
+                            >
+                              Post
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Comment Input */}
+                  <div className="mt-2 flex items-center space-x-2">
+                    <Avatar className="h-6 w-6">
+                      <AvatarImage src="https://picsum.photos/50/50" alt="Current User" /> {/* TODO: Replace with actual user data */}
+                      <AvatarFallback>CU</AvatarFallback>
+                    </Avatar>
+                    <Input
+                      type="text"
+                      placeholder="Add a comment..."
+                      value={commentInput[post.id] || ''}
+                      onChange={(e) => setCommentInput(prev => ({ ...prev, [post.id]: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleCommentSubmit(post.id);
+                        }
+                      }}
+                      className="text-sm"
+                    />
+                    <Button variant="ghost" size="sm" onClick={() => handleCommentSubmit(post.id)}>Post</Button>
+                  </div>
+
                 </CardContent>
               </Card>
             ))}
