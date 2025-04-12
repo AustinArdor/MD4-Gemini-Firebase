@@ -9,10 +9,18 @@
 
 import {ai} from '@/ai/ai-instance';
 import {z} from 'genkit';
-import {getGoogleDocumentChanges} from '@/services/google-docs';
+import {GoogleDocumentChange} from '@/services/google-docs';
 
 const AnalyzeDocumentChangesInputSchema = z.object({
   documentId: z.string().describe('The ID of the Google Document to analyze.'),
+  changes: z.array(
+    z.object({
+      wordsAdded: z.number().describe('The number of words added.'),
+      wordsRemoved: z.number().describe('The number of words removed.'),
+      contentAdded: z.string().describe('The content added.'),
+      contentRemoved: z.string().describe('The content removed.'),
+    })
+  ).describe('The changes in the Google Document.'),
 });
 export type AnalyzeDocumentChangesInput = z.infer<
   typeof AnalyzeDocumentChangesInputSchema
@@ -80,10 +88,9 @@ const analyzeDocumentChangesFlow = ai.defineFlow<
     outputSchema: AnalyzeDocumentChangesOutputSchema,
   },
   async input => {
-    const changes = await getGoogleDocumentChanges(input.documentId);
     const {output} = await prompt({
       documentId: input.documentId,
-      changes: changes,
+      changes: input.changes,
     });
     return output!;
   }

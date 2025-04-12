@@ -8,6 +8,7 @@ import {analyzeDocumentChanges} from '@/ai/flows/analyze-document-changes';
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {GoogleDocsLogoIcon, AsteriskIcon} from '@/components/icons';
+import {generateSocialPost} from '@/ai/flows/generate-social-post';
 
 export default function Home() {
   const [googleDocuments, setGoogleDocuments] = useState<GoogleDocument[]>([]);
@@ -29,17 +30,40 @@ export default function Home() {
 
   const handleAnalyzeDocument = async () => {
     if (selectedDocumentId) {
-      const analysisResult = await analyzeDocumentChanges({documentId: selectedDocumentId});
-      setAnalysisSummary(analysisResult.summary);
+      const changes = await getGoogleDocumentChanges(selectedDocumentId);
+      if (changes && changes.length > 0) {
+        const analysisResult = await analyzeDocumentChanges({documentId: selectedDocumentId, changes: changes});
+        setAnalysisSummary(analysisResult.summary);
+      } else {
+        setAnalysisSummary("No changes found in the last 24 hours.");
+      }
     }
   };
+
+  const handleGenerateSocialPost = async () => {
+      if (selectedDocumentId) {
+          const changes = await getGoogleDocumentChanges(selectedDocumentId);
+          if (changes && changes.length > 0) {
+              const post = await generateSocialPost({documentId: selectedDocumentId, changes: changes});
+              if (post && post.postContent) {
+                  // TODO: Implement posting to social feed.
+                  alert("Generated Post: " + post.postContent); // Replace with actual posting logic
+              } else {
+                  alert("Could not generate social post.");
+              }
+          } else {
+              alert("No changes found to generate a social post.");
+          }
+      }
+  };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-3xl font-bold text-calm-blue">
           Welcome to{' '}
-          <span className="text-primary">The Myth Dimension</span>
+          <span className="text-accent">The Myth Dimension</span>
         </h1>
 
         <div className="mt-6">
@@ -74,6 +98,9 @@ export default function Home() {
         <div className="mt-6">
           <Button onClick={handleAnalyzeDocument} disabled={!selectedDocumentId}>
             Analyze Document
+          </Button>
+          <Button onClick={handleGenerateSocialPost} disabled={!selectedDocumentId} className="ml-4">
+              Generate Social Post
           </Button>
         </div>
 
