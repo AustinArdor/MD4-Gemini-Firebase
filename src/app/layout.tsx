@@ -8,7 +8,8 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {Bell} from "lucide-react";
 import {useState} from "react";
-import {metadata} from './layout.server';
+import {useRouter} from 'next/navigation';
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,6 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [notifications, setNotifications] = useState(5); // Example: 5 notifications
+    const router = useRouter();
 
   return (
     <html lang="en">
@@ -72,7 +74,7 @@ export default function RootLayout({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuItem>
-                    <Link href="/profile">My Profile</Link>
+                      <Link href="/profile">My Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     Settings
