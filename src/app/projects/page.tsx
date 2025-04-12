@@ -43,21 +43,12 @@ const ProjectPage: React.FC = () => {
   });
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [googleDocuments, setGoogleDocuments] = useState<GoogleDocument[]>([]);
-  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
   const [analysisSummary, setAnalysisSummary] = useState<string | null>(null);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [contributions, setContributions] = useState<{[key: string]: number}>({});
   const [showProjectsPublicly, setShowProjectsPublicly] = useState(true);
   const [showContributionsPublicly, setShowContributionsPublicly] = useState(true);
-
-  const contributionsShades = {
-    0: 'var(--contribution-0)',
-    '1-5': 'var(--contribution-1-5)',
-    '5-10': 'var(--contribution-5-10)',
-    '10-15': 'var(--contribution-10-15)',
-    '15+': 'var(--contribution-15-plus)',
-  };
 
   const maxProjects = 3;
   const maxProjectsUpgrade = 9;
@@ -107,81 +98,7 @@ const ProjectPage: React.FC = () => {
         wordCountGoal: 150000,
       },
     ]);
-
-    // Load Google Documents
-    const fetchDocuments = async () => {
-      const documents = await listGoogleDocuments();
-      setGoogleDocuments(documents);
-    };
-
-    fetchDocuments();
   }, []);
-
-  useEffect(() => {
-    // Load Google Documents
-    const fetchDocuments = async () => {
-      const documents = await listGoogleDocuments();
-      setGoogleDocuments(documents);
-    };
-
-    fetchDocuments();
-  }, []);
-
-  const handleAnalyzeDocument = async (projectId: string) => {
-    const project = projects.find(p => p.id === projectId);
-    if (!project || !project.googleDocId) {
-      toast({
-        title: "Error!",
-        description: "No Google Doc linked to this project.",
-      });
-      return;
-    }
-
-    const changes = await getGoogleDocumentChanges(project.googleDocId);
-    if (changes && changes.length > 0) {
-      const analysisResult = await analyzeDocumentChanges({documentId: project.googleDocId, changes: changes});
-      setAnalysisSummary(analysisResult.summary);
-
-      // TODO: implement auto update of word count.
-      // const wordCountChange = changes.reduce((acc, change) => acc + change.wordsAdded - change.wordsRemoved, 0);
-      // handleProjectUpdate(projectId, {wordCount: project.wordCount + wordCountChange});
-
-    } else {
-      setAnalysisSummary("No changes found in the last 24 hours.");
-    }
-  };
-
-  const handleGenerateSocialPost = async (projectId: string) => {
-      const project = projects.find(p => p.id === projectId);
-      if (!project || !project.googleDocId) {
-        toast({
-          title: "Error!",
-          description: "No Google Doc linked to this project.",
-        });
-        return;
-      }
-      const changes = await getGoogleDocumentChanges(project.googleDocId);
-      if (changes && changes.length > 0) {
-          const post = await generateSocialPost({documentId: project.googleDocId, changes: changes});
-          if (post && post.postContent) {
-              // TODO: Implement posting to social feed.
-              toast({
-                title: "Generated!",
-                description: "Generated Post: " + post.postContent,
-              });// Replace with actual posting logic
-          } else {
-              toast({
-                title: "Error!",
-                description: "Could not generate social post.",
-              });
-          }
-      } else {
-          toast({
-            title: "Error!",
-            description: "No changes found to generate a social post.",
-          });
-      }
-  };
 
   const handleCreateProject = () => {
     if (projects.length < maxProjects) {
@@ -239,6 +156,79 @@ const ProjectPage: React.FC = () => {
         setCurrentDate(newDate);
     }
   };
+
+    const handleAnalyzeDocument = async (projectId: string) => {
+        const project = projects.find(p => p.id === projectId);
+        if (!project || !project.googleDocId) {
+            toast({
+                title: "Error!",
+                description: "No Google Doc linked to this project.",
+            });
+            return;
+        }
+
+        try {
+            const changes = await getGoogleDocumentChanges(project.googleDocId);
+            if (changes && changes.length > 0) {
+                const analysisResult = await analyzeDocumentChanges({documentId: project.googleDocId, changes: changes});
+                setAnalysisSummary(analysisResult.summary);
+
+                // TODO: implement auto update of word count.
+                // const wordCountChange = changes.reduce((acc, change) => acc + change.wordsAdded - change.wordsRemoved, 0);
+                // handleProjectUpdate(projectId, {wordCount: project.wordCount + wordCountChange});
+
+            } else {
+                setAnalysisSummary("No changes found in the last 24 hours.");
+            }
+        } catch (error: any) {
+            console.error("Error analyzing document:", error);
+            toast({
+                title: "Error!",
+                description: "Failed to analyze document: " + error.message,
+            });
+        }
+    };
+
+    const handleGenerateSocialPost = async (projectId: string) => {
+        const project = projects.find(p => p.id === projectId);
+        if (!project || !project.googleDocId) {
+            toast({
+                title: "Error!",
+                description: "No Google Doc linked to this project.",
+            });
+            return;
+        }
+        try {
+            const changes = await getGoogleDocumentChanges(project.googleDocId);
+            if (changes && changes.length > 0) {
+                const post = await generateSocialPost({documentId: project.googleDocId, changes: changes});
+                if (post && post.postContent) {
+                    // TODO: Implement posting to social feed.
+                    toast({
+                        title: "Generated!",
+                        description: "Generated Post: " + post.postContent,
+                    });// Replace with actual posting logic
+                } else {
+                    toast({
+                        title: "Error!",
+                        description: "Could not generate social post.",
+                    });
+                }
+            } else {
+                toast({
+                    title: "Error!",
+                    description: "No changes found to generate a social post.",
+                });
+            }
+        } catch (error: any) {
+            console.error("Error generating social post:", error);
+            toast({
+                title: "Error!",
+                description: "Failed to generate social post: " + error.message,
+            });
+        }
+    };
+
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-2">
@@ -317,27 +307,23 @@ const ProjectPage: React.FC = () => {
                         />
                       </div>
 
-                      {googleDocuments.length > 0 ? (
-                        <div className="flex flex-col space-y-1.5">
-                          <Label>Link Google Document</Label>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="outline">
-                                {project.googleDocId ? googleDocuments.find(doc => doc.documentId === project.googleDocId)?.title : "Select a document"}
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56">
-                              {googleDocuments.map((doc) => (
-                                <DropdownMenuItem key={doc.documentId} onSelect={() => handleDocumentSelect(project.id, doc.documentId)}>
-                                  {doc.title}
-                                </DropdownMenuItem>
-                              ))}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      ) : (
-                        <div>Loading documents...</div>
-                      )}
+                      <div className="flex flex-col space-y-1.5">
+                        <Label>Link Google Document</Label>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline">
+                              {project.googleDocId ? googleDocuments.find(doc => doc.documentId === project.googleDocId)?.title : "Select a document"}
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-56">
+                            {googleDocuments.map((doc) => (
+                              <DropdownMenuItem key={doc.documentId} onSelect={() => handleDocumentSelect(project.id, doc.documentId)}>
+                                {doc.title}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
 
                       <div className="flex items-center space-x-2">
                           <Label htmlFor="public">Make Project Public</Label>
@@ -456,7 +442,7 @@ const ProjectPage: React.FC = () => {
 
               return (
                 <div
-                  key={`${dateKey}-${index}`} // Ensure unique key by adding index
+                  key={`${dateKey}-${index}`}
                   className="w-6 h-6 rounded-sm"
                   style={{backgroundColor: contributionShade}}
                   title={`${dateKey}: ${contributionCount} contributions`}
