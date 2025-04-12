@@ -431,7 +431,7 @@ const ProjectPage: React.FC = () => {
 
           <div className="flex justify-center items-center mb-2">
               <Button variant="outline" size="icon" onClick={goToPrevious90Days}><ChevronLeft /></Button>
-              <h3 className="mx-4 text-lg font-semibold">{currentDate.toLocaleDateString()} - {(new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000))).toLocaleDateString()}</h3>
+              <h3 className="mx-4 text-lg font-semibold">{(new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000))).toLocaleDateString('en-CA')} - {currentDate.toLocaleDateString('en-CA')}</h3>
               <Button variant="outline" size="icon" onClick={goToNext90Days} disabled={new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000)) > new Date()}><ChevronRight /></Button>
           </div>
           <div className="grid grid-cols-15 gap-1">
