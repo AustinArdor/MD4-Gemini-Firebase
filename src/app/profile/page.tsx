@@ -56,9 +56,15 @@ const ProfilePage: React.FC = () => {
                     </div>
 
                     {/* Profile Information */}
-                    <div className="mt-8 pl-4">
-                        <h1 className="text-3xl font-bold text-calm-blue text-left">{displayName}</h1>
-                        <p className="text-sm text-gray-500 text-left">{bio}</p>
+                    <div className="mt-8 pl-4 flex flex-row">
+                        {/*<h1 className="text-3xl font-bold text-calm-blue text-left">{displayName}</h1>
+                        <p className="text-sm text-gray-500 text-left">{bio}</p>*/}
+                        <div className="w-1/4"/>
+                        <div className="w-3/4 text-left">
+                            <h1 className="text-3xl font-bold text-calm-blue">{displayName}</h1>
+                            <p className="text-sm text-gray-500">{bio}</p>
+                        </div>
+
 
                         {/* Follower/Following Counts */}
                         <div className="flex justify-start mt-2 space-x-4">
