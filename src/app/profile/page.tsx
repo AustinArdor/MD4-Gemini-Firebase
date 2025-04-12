@@ -71,11 +71,11 @@ const ProfilePage: React.FC = () => {
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogTitle>Followers</DialogTitle>
-                                    <DialogDescription>
+                                    <div className="py-2 flex flex-col">
                                         {followerUsers.map((user) => (
                                             <div key={user} className="py-2">{user}</div>
                                         ))}
-                                    </DialogDescription>
+                                    </div>
                                 </DialogContent>
                             </Dialog>
 
@@ -87,11 +87,11 @@ const ProfilePage: React.FC = () => {
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogTitle>Following</DialogTitle>
-                                    <DialogDescription>
+                                    <div className="py-2 flex flex-col">
                                         {followingUsers.map((user) => (
                                             <div key={user} className="py-2">{user}</div>
                                         ))}
-                                    </DialogDescription>
+                                    </div>
                                 </DialogContent>
                             </Dialog>
                         </div>
