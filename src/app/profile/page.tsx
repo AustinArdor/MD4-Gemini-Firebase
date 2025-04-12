@@ -25,6 +25,7 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription} from "@/components/ui/dialog";
 
 const ProfilePage: React.FC = () => {
+    const [isEditing, setIsEditing] = useState(false);
     const [displayName, setDisplayName] = useState('John Doe');
     const [bio, setBio] = useState('Aspiring fiction author.');
     const [bannerImage, setBannerImage] = useState('https://picsum.photos/820/312');
@@ -49,6 +50,15 @@ const ProfilePage: React.FC = () => {
     const followerUsers = Array.from({ length: followers }, (_, i) => `Follower ${i + 1}`);
     const followingUsers = Array.from({ length: following }, (_, i) => `Following ${i + 1}`);
 
+    const handleSaveProfile = () => {
+        // Implement save logic here, e.g., store the updated data in local storage or a database
+        setIsEditing(false);
+        toast({
+            title: "Profile Updated!",
+            description: "Your profile has been updated successfully.",
+        });
+    };
+
 
     return (
         <div className="flex flex-col items-center justify-start min-h-screen py-2">
@@ -61,6 +71,7 @@ const ProfilePage: React.FC = () => {
                             <AvatarImage src={profileImage} alt="Profile Picture" />
                             <AvatarFallback>{displayName.substring(0, 2)}</AvatarFallback>
                         </Avatar>
+
                         {/* Follower/Following Counts */}
                         <div className="absolute right-4 top-4 flex flex-col items-end bg-gray-200/50 backdrop-blur-sm rounded-md p-2">
                             <Dialog open={followerListOpen} onOpenChange={setFollowerListOpen}>
@@ -71,6 +82,7 @@ const ProfilePage: React.FC = () => {
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogTitle>Followers</DialogTitle>
+                                    <DialogDescription>List of users following you:</DialogDescription>
                                     <div className="py-2 flex flex-col">
                                         {followerUsers.map((user) => (
                                             <div key={user} className="py-2">{user}</div>
@@ -87,6 +99,7 @@ const ProfilePage: React.FC = () => {
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogTitle>Following</DialogTitle>
+                                    <DialogDescription>List of users you are following:</DialogDescription>
                                     <div className="py-2 flex flex-col">
                                         {followingUsers.map((user) => (
                                             <div key={user} className="py-2">{user}</div>
@@ -95,19 +108,48 @@ const ProfilePage: React.FC = () => {
                                 </DialogContent>
                             </Dialog>
                         </div>
+
+                        {/* Edit Button */}
+                        <div className="absolute left-4 top-4">
+                            {!isEditing && (
+                                <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                                    Edit Profile
+                                </Button>
+                            )}
+                        </div>
                     </div>
 
                     {/* Profile Information */}
                     <div className="mt-8 pl-4 flex flex-row">
-                        {/*<h1 className="text-3xl font-bold text-calm-blue text-left">{displayName}</h1>
-                        <p className="text-sm text-gray-500 text-left">{bio}</p>*/}
                         <div className="w-1/4"/>
                         <div className="w-3/4 text-left">
-                            <h1 className="text-3xl font-bold text-calm-blue">{displayName}</h1>
-                            <p className="text-sm text-gray-500">{bio}</p>
+                            {isEditing ? (
+                                <>
+                                    <Label htmlFor="display-name">Display Name</Label>
+                                    <Input
+                                        type="text"
+                                        id="display-name"
+                                        maxLength={50}
+                                        value={displayName}
+                                        onChange={(e) => setDisplayName(e.target.value)}
+                                        className="mb-2"
+                                    />
+                                    <Label htmlFor="bio">Bio</Label>
+                                    <Textarea
+                                        id="bio"
+                                        maxLength={160}
+                                        value={bio}
+                                        onChange={(e) => setBio(e.target.value)}
+                                        className="mb-2"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <h1 className="text-3xl font-bold text-calm-blue">{displayName}</h1>
+                                    <p className="text-sm text-gray-500">{bio}</p>
+                                </>
+                            )}
                         </div>
-
-
 
                         {/* Genre Bubbles */}
                         <div className="flex flex-wrap justify-start mt-4">
@@ -120,6 +162,7 @@ const ProfilePage: React.FC = () => {
                                         selectedGenres.includes(genre) ? "bg-accent text-accent-foreground" : ""
                                     )}
                                     onClick={() => handleGenreSelect(genre)}
+                                    disabled={!isEditing}
                                 >
                                     {genre}
                                 </Button>
@@ -141,7 +184,15 @@ const ProfilePage: React.FC = () => {
                                     <CardDescription>A little bit about myself.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <p>{bio}</p>
+                                    {isEditing ? (
+                                        <Textarea
+                                            value={bio}
+                                            onChange={(e) => setBio(e.target.value)}
+                                            className="mb-2"
+                                        />
+                                    ) : (
+                                        <p>{bio}</p>
+                                    )}
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -168,6 +219,17 @@ const ProfilePage: React.FC = () => {
                             </Card>
                         </TabsContent>
                     </Tabs>
+
+                    {isEditing && (
+                        <div className="mt-4 flex justify-end">
+                            <Button variant="secondary" onClick={() => setIsEditing(false)}>
+                                Cancel
+                            </Button>
+                            <Button className="ml-2" onClick={handleSaveProfile}>
+                                Save Profile
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </main>
             <footer className="flex items-center justify-center w-full h-24 border-t">
