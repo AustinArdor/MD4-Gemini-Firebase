@@ -18,6 +18,7 @@ import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Switch} from "@/components/ui/switch";
+import {toast} from '@/hooks/use-toast';
 
 // Define Project Type
 interface Project {
@@ -129,7 +130,10 @@ const ProjectPage: React.FC = () => {
   const handleAnalyzeDocument = async (projectId: string) => {
     const project = projects.find(p => p.id === projectId);
     if (!project || !project.googleDocId) {
-      alert("No Google Doc linked to this project.");
+      toast({
+        title: "Error!",
+        description: "No Google Doc linked to this project.",
+      });
       return;
     }
 
@@ -150,7 +154,10 @@ const ProjectPage: React.FC = () => {
   const handleGenerateSocialPost = async (projectId: string) => {
       const project = projects.find(p => p.id === projectId);
       if (!project || !project.googleDocId) {
-        alert("No Google Doc linked to this project.");
+        toast({
+          title: "Error!",
+          description: "No Google Doc linked to this project.",
+        });
         return;
       }
       const changes = await getGoogleDocumentChanges(project.googleDocId);
@@ -158,12 +165,21 @@ const ProjectPage: React.FC = () => {
           const post = await generateSocialPost({documentId: project.googleDocId, changes: changes});
           if (post && post.postContent) {
               // TODO: Implement posting to social feed.
-              alert("Generated Post: " + post.postContent); // Replace with actual posting logic
+              toast({
+                title: "Generated!",
+                description: "Generated Post: " + post.postContent,
+              });// Replace with actual posting logic
           } else {
-              alert("Could not generate social post.");
+              toast({
+                title: "Error!",
+                description: "Could not generate social post.",
+              });
           }
       } else {
-          alert("No changes found to generate a social post.");
+          toast({
+            title: "Error!",
+            description: "No changes found to generate a social post.",
+          });
       }
   };
 
@@ -179,7 +195,10 @@ const ProjectPage: React.FC = () => {
         wordCountGoal: 100000,
       });
     } else {
-      alert(`Maximum ${maxProjects} projects allowed. Upgrade to premium for more!`);
+      toast({
+        title: "Upgrade to Premium!",
+        description: `Maximum ${maxProjects} projects allowed. Upgrade to premium for more!`,
+      });
     }
   };
 
