@@ -233,7 +233,7 @@ const SocialFeed = () => {
                             className={likedComments.has(comment.id) ? 'text-red-500' : ''}
                           >
                             <Heart fill={likedComments.has(comment.id) ? 'red' : 'none'} className="h-3 w-3 mr-1" />
-                            Like
+                            
                           </Button>
                           <Button variant="ghost" size="xs">Reply</Button>
                         </div>
