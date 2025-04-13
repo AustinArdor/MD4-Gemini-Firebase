@@ -167,9 +167,7 @@ const SocialFeed = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-3xl font-bold text-calm-blue">
-          Welcome to <span className="text-accent">The Myth Dimension</span> Social Feed
-        </h1>
+        
 
         <div className="flex w-full mt-6">
           {/* Social Feed */}
