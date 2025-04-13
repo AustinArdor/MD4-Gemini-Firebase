@@ -205,7 +205,7 @@ const SocialFeed = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-[#4e6d7f]">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         <div className="flex w-full mt-6">
           {/* Social Feed */}
@@ -368,6 +368,8 @@ const SocialFeed = () => {
                   placeholder="What's on your mind?"
                   value={newPostContent}
                   onChange={(e) => setNewPostContent(e.target.value)}
+                  className="text-foreground"
+                  style={{ color: '#d7d0d7' }}
                 />
                 <Button className="mt-4" onClick={handlePublishPost}>
                   Publish
