@@ -95,10 +95,19 @@ export default function RootLayout({
           </div>
         </header>
         {children}
+          <footer className="flex items-center justify-center w-full h-12 border-t text-[#d7d0d7] bg-[#344870]">
+              <Link href="/settings" className="text-sm font-medium hover:text-accent text-[#d7d0d7] mr-4">
+                  Settings
+              </Link>
+              <Link href="/terms" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
+                  Terms of Service
+              </Link>
+          </footer>
       </body>
     </html>
   );
 }
+
 
 
 
