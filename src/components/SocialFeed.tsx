@@ -219,13 +219,13 @@ const SocialFeed = () => {
                   ref={isLastPost ? lastPostElementRef : null}
                 >
                   <CardHeader className="flex items-center space-x-4">
-                    <Link href="/profile">
+                    <Link href={`/profile`}>
                       <Avatar className="cursor-pointer">
                         <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
                         <AvatarFallback>{post.author.name.substring(0, 2)}</AvatarFallback>
                       </Avatar>
                     </Link>
-                    <Link href="/profile">
+                    <Link href={`/profile`}>
                       <CardTitle className="cursor-pointer">{post.author.name}</CardTitle>
                     </Link>
                   </CardHeader>
@@ -233,12 +233,14 @@ const SocialFeed = () => {
                     {post.type === 'project' ? (
                       <>
                         <CardTitle>{post.bookTitle}</CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-left">
                           {post.wordCountChange > 0 ? `+${post.wordCountChange} words` : `${post.wordCountChange} words`}
                         </CardDescription>
-                        <CardDescription>{post.summary}</CardDescription>
+                        <CardDescription className="text-left">{post.summary}</CardDescription>
                         <p className="text-left">{post.content}</p>
-                        <Button>View Project</Button>
+                        <div className="flex justify-end mt-4">
+                          <Button >View Project</Button>
+                        </div>
                       </>
                     ) : (
                       <p className="text-left">{post.content}</p>
