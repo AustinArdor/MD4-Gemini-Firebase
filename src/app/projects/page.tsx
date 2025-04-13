@@ -10,7 +10,7 @@ import {Slider} from '@/components/ui/slider';
 import {Textarea} from '@/components/ui/textarea';
 import {Progress} from '@/components/ui/progress';
 import {cn} from '@/lib/utils';
-import {listGoogleDocuments, getGoogleDocumentChanges, GoogleDocument} from '@/services/google-docs';
+import {getGoogleDocumentChanges, GoogleDocument} from '@/services/google-docs';
 import {analyzeDocumentChanges} from '@/ai/flows/analyze-document-changes';
 import {generateSocialPost} from '@/ai/flows/generate-social-post';
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
@@ -86,7 +86,7 @@ const ProjectPage: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('projects', JSON.stringify(projects));
     updateContributions();
-  }, [projects]);
+  }, [projects, updateContributions]);
 
   const handleCreateProject = () => {
     if (projects.length < maxProjects) {
@@ -130,6 +130,8 @@ const ProjectPage: React.FC = () => {
             const dateKey = format(new Date(), 'yyyy-MM-dd');
             if (project.googleDocId) {
                 newContributions[dateKey] = (newContributions[dateKey] || 0) + 1;
+            } else {
+                newContributions[dateKey] = (newContributions[dateKey] || 0);
             }
         });
 
@@ -248,9 +250,7 @@ const ProjectPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-2">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-3xl font-bold text-calm-blue">
-          Welcome to <span className="text-accent">The Myth Dimension</span>
-        </h1>
+        
         <h2 className="text-xl mt-2 text-calm-blue">Your Projects</h2>
 
         <div className="mt-6">
@@ -487,7 +487,7 @@ const ProjectPage: React.FC = () => {
         </div>
       </main>
 
-      <footer className="flex items-center justify-center w-full h-12 border-t text-[#d7d0d7] bg-[#344870]">
+      <footer className="flex items-center justify-center w-full h-12 text-[#d7d0d7] bg-[#344870]">
           <Link href="/settings" className="text-sm font-medium hover:text-accent text-[#d7d0d7] mr-4">
               Settings
           </Link>
