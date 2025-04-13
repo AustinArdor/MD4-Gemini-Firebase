@@ -18,6 +18,9 @@ import {Switch} from "@/components/ui/switch";
 import {toast} from '@/hooks/use-toast';
 import {format} from 'date-fns';
 import Link from 'next/link';
+import MythDimensionLogo from '@/public/MythDimensionLogo.png';
+import Image from 'next/image';
+
 
 // Define Project Type
 interface Project {
@@ -160,6 +163,7 @@ const ProjectPage: React.FC = () => {
     }
   };
 
+
     const handleAnalyzeDocument = async (projectId: string) => {
         const project = projects.find(p => p.id === projectId);
         if (!project || !project.googleDocId) {
@@ -232,29 +236,80 @@ const ProjectPage: React.FC = () => {
         }
     };
 
-    const dateFormat = new Intl.DateTimeFormat('en-CA', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    });
+
 
     const getDatesForDisplay = () => {
         const startDate = new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000));
         return {
-            startDate: dateFormat.format(startDate),
-            endDate: dateFormat.format(currentDate),
+            startDate: format(startDate, 'yyyy-MM-dd'),
+            endDate: format(currentDate, 'yyyy-MM-dd'),
         };
     };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-2 bg-[#4e6d7f]">
+        <header className="bg-[#344870] border-b w-full">
+            <div className="container flex items-center justify-between h-16">
+                <Link href="/" className="flex items-center font-semibold text-[#d7d0d7] space-x-2 ml-6">
+                    <Image src={MythDimensionLogo} alt="Myth Dimension Logo" width={30} height={30} />
+                    <span className="text-xl">The Myth Dimension</span>
+                </Link>
+                <nav className="flex items-center space-x-4">
+                    <Link href="/" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
+                        My Feed
+                    </Link>
+                    <Link href="/projects" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
+                        My Projects
+                    </Link>
+                    {/* Notification Bell */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className="relative p-2 hover:bg-secondary rounded-full">
+                                <Bell className="h-5 w-5 text-[#d7d0d7]" />
+                                {/* Notifications Badge - Example */}
+                                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">
+                                    5
+                                </span>
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                            <DropdownMenuItem>
+                                No New Notifications
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    {/* Profile Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="h-8 w-8 rounded-full ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                                <Avatar>
+                                    <AvatarImage src="https://picsum.photos/50/50" alt="Profile" />
+                                    <AvatarFallback>MT</AvatarFallback>
+                                </Avatar>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                            <DropdownMenuItem>
+                                <Link href="/profile">My Profile</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Settings
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Logout
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </nav>
+            </div>
+        </header>
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         
         <h2 className="text-2xl mt-2 text-[#d7d0d7]">Your Projects</h2>
 
         <div className="mt-6">
           {projects.map((project) => (
-            <Card key={project.id} className="w-[600px] mb-4 bg-card text-card-foreground">
+            <Card key={project.id} className="w-[600px] mb-4 bg-[#d7d0d7] text-card-foreground">
               <CardHeader>
                 <CardTitle>
                   {editingProjectId === project.id ? (
@@ -396,7 +451,7 @@ const ProjectPage: React.FC = () => {
         </div>
 
         {projects.length < maxProjects && (
-          <Card className="w-[600px] mt-6 bg-muted text-card-foreground">
+          <Card className="w-[600px] mt-6 bg-[#d7d0d7] text-card-foreground">
             <CardHeader>
               <CardTitle>Create New Project</CardTitle>
               <CardDescription>Add a new project to your collection.</CardDescription>
