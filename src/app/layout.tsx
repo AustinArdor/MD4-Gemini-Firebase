@@ -9,7 +9,6 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {Bell} from "lucide-react";
 import {useState} from "react";
 import {useRouter} from 'next/navigation';
-import Image from 'next/image';
 
 
 const geistSans = Geist({
@@ -36,12 +35,6 @@ export default function RootLayout({
         <header className="bg-[#344870] border-b">
           <div className="container flex items-center justify-between h-16">
             <Link href="/" className="flex items-center font-semibold text-[#d7d0d7] space-x-2 ml-6">
-                <Image
-                    src="/logo.png"
-                    alt="The Myth Dimension Logo"
-                    width={30}
-                    height={30}
-                />
               <span className="text-xl">The Myth Dimension</span>
             </Link>
             <nav className="flex items-center space-x-4">
@@ -107,6 +100,7 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
 
