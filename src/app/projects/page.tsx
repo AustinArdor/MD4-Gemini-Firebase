@@ -6,7 +6,6 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/compo
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {Slider} from '@/components/ui/slider';
 import {Textarea} from '@/components/ui/textarea';
 import {Progress} from '@/components/ui/progress';
 import {cn} from '@/lib/utils';
@@ -14,8 +13,6 @@ import {getGoogleDocumentChanges, GoogleDocument} from '@/services/google-docs';
 import {analyzeDocumentChanges} from '@/ai/flows/analyze-document-changes';
 import {generateSocialPost} from '@/ai/flows/generate-social-post';
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {Calendar} from "@/components/ui/calendar";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Switch} from "@/components/ui/switch";
 import {toast} from '@/hooks/use-toast';
@@ -250,10 +247,10 @@ const ProjectPage: React.FC = () => {
     };
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen py-2">
+    <div className="flex flex-col items-center justify-start min-h-screen py-2 bg-[#4e6d7f]">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         
-        <h2 className="text-xl mt-2 text-calm-blue">Your Projects</h2>
+        <h2 className="text-2xl mt-2 text-[#d7d0d7]">Your Projects</h2>
 
         <div className="mt-6">
           {projects.map((project) => (
@@ -449,11 +446,11 @@ const ProjectPage: React.FC = () => {
         )}
 
        <div className="mt-12 w-full">
-          <h2 className="text-2xl font-bold text-calm-blue mb-4">Contribution Tracker</h2>
+          <h2 className="text-2xl font-bold text-[#d7d0d7] mb-4">Contribution Tracker</h2>
 
           <div className="flex justify-center items-center mb-2">
               <Button variant="outline" size="icon" onClick={goToPrevious90Days}><ChevronLeft /></Button>
-              <h3 className="mx-4 text-lg font-semibold">
+              <h3 className="mx-4 text-lg font-semibold text-[#d7d0d7]">
                   {(() => {
                       const {startDate, endDate} = getDatesForDisplay();
                       return `${startDate} - ${endDate}`;
@@ -481,10 +478,10 @@ const ProjectPage: React.FC = () => {
           </div>
         </div>
         <div className="mt-6 flex items-center space-x-4">
-            <Label htmlFor="projects-public">Show Projects Publicly</Label>
+            <Label htmlFor="projects-public" className="text-[#d7d0d7]">Show Projects Publicly</Label>
             <Switch id="projects-public" checked={showProjectsPublicly} onCheckedChange={setShowProjectsPublicly} />
 
-            <Label htmlFor="contributions-public">Show Contributions Publicly</Label>
+            <Label htmlFor="contributions-public" className="text-[#d7d0d7]">Show Contributions Publicly</Label>
             <Switch id="contributions-public" checked={showContributionsPublicly} onCheckedChange={setShowContributionsPublicly} />
         </div>
       </main>
