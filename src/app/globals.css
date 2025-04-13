@@ -48,7 +48,7 @@ body {
     --gold: 43 70% 64%;
 
     /* Project colors */
-    --project-card-background: 220 10% 98%;
+    --project-card-background: 0 0% 84%;
     --project-card-foreground: 220 20% 20%;
     --project-status-inprogress: 50 70% 50%; /* Green */
     --project-status-upcoming: 43 70% 64%; /* Gold */
@@ -132,4 +132,5 @@ body {
 .social-feed-post-content {
   @apply mt-2;
 }
+
 
