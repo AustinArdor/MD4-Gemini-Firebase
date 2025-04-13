@@ -265,8 +265,8 @@ const ProjectPage: React.FC = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <button className="relative p-2 hover:bg-secondary rounded-full">
-                                <Bell className="h-5 w-5 text-[#d7d0d7]" />
                                 {/* Notifications Badge - Example */}
+                                <Bell className="h-5 w-5 text-[#d7d0d7]" />
                                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">
                                     5
                                 </span>
