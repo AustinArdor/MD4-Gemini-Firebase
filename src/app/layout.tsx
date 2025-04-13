@@ -33,9 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className="bg-background border-b">
+        <header className="bg-[#344870] border-b">
           <div className="container flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center font-semibold text-calm-blue space-x-2">
+            <Link href="/" className="flex items-center font-semibold text-[#d7d0d7] space-x-2 ml-6">
                 <Image
                     src="/logo.png"
                     alt="The Myth Dimension Logo"
@@ -45,17 +45,17 @@ export default function RootLayout({
               <span className="text-xl">The Myth Dimension</span>
             </Link>
             <nav className="flex items-center space-x-4">
-              <Link href="/" className="text-sm font-medium hover:text-accent">
+              <Link href="/" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
                 My Feed
               </Link>
-              <Link href="/projects" className="text-sm font-medium hover:text-accent">
+              <Link href="/projects" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
                 My Projects
               </Link>
               {/* Notification Bell */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative p-2 hover:bg-secondary rounded-full">
-                    <Bell className="h-5 w-5 text-gray-500" />
+                    <Bell className="h-5 w-5 text-[#d7d0d7]" />
                     {notifications > 0 && (
                       <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">
                         {notifications > 100 ? '100+' : notifications}
@@ -99,4 +99,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
