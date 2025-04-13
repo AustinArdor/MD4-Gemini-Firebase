@@ -315,6 +315,7 @@ const SocialFeed = () => {
                                   }
                                 }}
                                 className="text-xs"
+                                style={{ color: '#d7d0d7' }}
                               />
                               <Button
                                 variant="ghost"
@@ -399,3 +400,4 @@ const SocialFeed = () => {
 };
 
 export default SocialFeed;
+
