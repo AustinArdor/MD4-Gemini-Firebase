@@ -346,6 +346,7 @@ const SocialFeed = () => {
                           }
                         }}
                         className="text-sm"
+                        style={{ color: '#d7d0d7' }}
                       />
                       <Button variant="ghost" size="sm" onClick={() => handleCommentSubmit(post.id)}>Post</Button>
                     </div>
