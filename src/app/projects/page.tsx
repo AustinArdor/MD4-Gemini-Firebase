@@ -20,6 +20,7 @@ import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Switch} from "@/components/ui/switch";
 import {toast} from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 // Define Project Type
 interface Project {
