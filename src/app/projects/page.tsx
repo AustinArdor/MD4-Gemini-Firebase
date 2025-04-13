@@ -19,7 +19,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Switch} from "@/components/ui/switch";
 import {toast} from '@/hooks/use-toast';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 import Link from 'next/link';
 
 // Define Project Type
@@ -55,6 +55,22 @@ const ProjectPage: React.FC = () => {
   const maxProjects = 3;
   const maxProjectsUpgrade = 9;
   const isUpgradePossible = projects.length < maxProjectsUpgrade;
+
+    const updateContributions = useCallback(() => {
+        const newContributions: {[key: string]: number} = {};
+
+        projects.forEach(project => {
+            const dateKey = format(new Date(), 'yyyy-MM-dd');
+            if (project.googleDocId) {
+                newContributions[dateKey] = (newContributions[dateKey] || 0) + 1;
+            } else {
+                newContributions[dateKey] = (newContributions[dateKey] || 0);
+            }
+        });
+
+        setContributions(newContributions);
+    }, [projects]);
+
 
   const handleProjectUpdate = (projectId: string, changes: Partial<Project>) => {
       setProjects(prevProjects =>
@@ -123,20 +139,6 @@ const ProjectPage: React.FC = () => {
       handleProjectUpdate(projectId, {googleDocId: documentId});
   };
 
-    const updateContributions = useCallback(() => {
-        const newContributions: {[key: string]: number} = {};
-
-        projects.forEach(project => {
-            const dateKey = format(new Date(), 'yyyy-MM-dd');
-            if (project.googleDocId) {
-                newContributions[dateKey] = (newContributions[dateKey] || 0) + 1;
-            } else {
-                newContributions[dateKey] = (newContributions[dateKey] || 0);
-            }
-        });
-
-        setContributions(newContributions);
-    }, [projects]);
 
 
   const today = new Date();
