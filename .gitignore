@@ -38,3 +38,33 @@ yarn-error.log*
 next-env.d.ts
 
 .genkit/*
+
+# Firebase config with sensitive info
+.runtimeconfig.json
+
+# Firebase cache
+.firebase/
+
+# Firebase log files
+firebase-debug.log
+ui-debug.log
+
+# Node dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+build/
+dist/
+
+# Service account keys
+*-service-account-key.json
+
+# Local config
+.firebaserc
