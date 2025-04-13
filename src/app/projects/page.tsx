@@ -254,7 +254,7 @@ const ProjectPage: React.FC = () => {
 
         <div className="mt-6">
           {projects.map((project) => (
-            <Card key={project.id} className="w-[600px] mb-4 bg-project-card-background text-project-card-foreground">
+            <Card key={project.id} className="w-[600px] mb-4 bg-card text-card-foreground">
               <CardHeader>
                 <CardTitle>
                   {editingProjectId === project.id ? (
@@ -372,7 +372,10 @@ const ProjectPage: React.FC = () => {
                       </span>
                     </div>
                     <div className="mb-4">
-                      <Label>Progress: {project.wordCount} / {project.wordCountGoal}</Label>
+                      <div className="flex justify-between">
+                        <Label>Progress:</Label>
+                        <Label>{project.wordCount} / {project.wordCountGoal}</Label>
+                      </div>
                       <Progress value={(project.wordCount / project.wordCountGoal) * 100} />
                     </div>
                     <div className="mt-4 flex justify-between">
@@ -393,7 +396,7 @@ const ProjectPage: React.FC = () => {
         </div>
 
         {projects.length < maxProjects && (
-          <Card className="w-[600px] mt-6 bg-[#d7d0d7] text-project-card-foreground">
+          <Card className="w-[600px] mt-6 bg-muted text-card-foreground">
             <CardHeader>
               <CardTitle>Create New Project</CardTitle>
               <CardDescription>Add a new project to your collection.</CardDescription>
