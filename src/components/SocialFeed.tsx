@@ -314,8 +314,7 @@ const SocialFeed = () => {
                                     handleReplySubmit(post.id, comment.id);
                                   }
                                 }}
-                                className="text-xs"
-                                style={{ color: '#d7d0d7' }}
+                                className="text-xs border border-input bg-background text-foreground"
                               />
                               <Button
                                 variant="ghost"
@@ -346,8 +345,7 @@ const SocialFeed = () => {
                             handleCommentSubmit(post.id);
                           }
                         }}
-                        className="text-sm"
-                        style={{ color: '#d7d0d7' }}
+                        className="text-sm border border-input bg-background text-foreground"
                       />
                       <Button variant="ghost" size="sm" onClick={() => handleCommentSubmit(post.id)}>Post</Button>
                     </div>
@@ -400,4 +398,3 @@ const SocialFeed = () => {
 };
 
 export default SocialFeed;
-
