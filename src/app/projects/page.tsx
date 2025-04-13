@@ -237,6 +237,13 @@ const ProjectPage: React.FC = () => {
         day: '2-digit',
     });
 
+    const getDatesForDisplay = () => {
+        const startDate = new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000));
+        return {
+            startDate: dateFormat.format(startDate),
+            endDate: dateFormat.format(currentDate),
+        };
+    };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-2">
@@ -445,7 +452,10 @@ const ProjectPage: React.FC = () => {
           <div className="flex justify-center items-center mb-2">
               <Button variant="outline" size="icon" onClick={goToPrevious90Days}><ChevronLeft /></Button>
               <h3 className="mx-4 text-lg font-semibold">
-                  {dateFormat.format(new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000)))} - {dateFormat.format(currentDate)}
+                  {(() => {
+                      const {startDate, endDate} = getDatesForDisplay();
+                      return `${startDate} - ${endDate}`;
+                  })()}
               </h3>
               <Button variant="outline" size="icon" onClick={goToNext90Days} disabled={new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000)) > new Date()}><ChevronRight /></Button>
           </div>
