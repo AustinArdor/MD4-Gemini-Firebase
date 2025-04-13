@@ -187,7 +187,7 @@ const SocialFeed = () => {
                     <CardTitle className="cursor-pointer">{post.author.name}</CardTitle>
                   </Link>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="ml-4">
                   {post.type === 'project' ? (
                     <>
                       <CardTitle>{post.bookTitle}</CardTitle>
@@ -195,11 +195,11 @@ const SocialFeed = () => {
                         {post.wordCountChange > 0 ? `+${post.wordCountChange} words` : `${post.wordCountChange} words`}
                       </CardDescription>
                       <CardDescription>{post.summary}</CardDescription>
-                      <p>{post.content}</p>
+                      <p className="text-left">{post.content}</p>
                       <Button>View Project</Button>
                     </>
                   ) : (
-                    <p>{post.content}</p>
+                    <p className="text-left">{post.content}</p>
                   )}
                   <div className="mt-4 flex items-center space-x-4">
                     <Button
@@ -216,7 +216,7 @@ const SocialFeed = () => {
                   {/* Comments Section */}
                   <div className="mt-4">
                     {comments[post.id]?.map((comment) => (
-                      <div key={comment.id} className="mb-2">
+                      <div key={comment.id} className="mb-2 ml-4">
                         <div className="flex items-center space-x-2">
                           <Avatar className="h-6 w-6">
                             <AvatarImage src={comment.author.avatarUrl} alt={comment.author.name} />
@@ -224,7 +224,7 @@ const SocialFeed = () => {
                           </Avatar>
                           <div className="text-sm font-semibold">{comment.author.name}</div>
                         </div>
-                        <div className="text-sm">{comment.text}</div>
+                        <div className="text-sm text-left">{comment.text}</div>
                         <div className="flex items-center space-x-4 mt-1">
                           <Button
                             variant="ghost"
@@ -248,7 +248,7 @@ const SocialFeed = () => {
                                 </Avatar>
                                 <div className="text-xs font-semibold">{reply.author.name}</div>
                               </div>
-                              <div className="text-xs">{reply.text}</div>
+                              <div className="text-xs text-left">{reply.text}</div>
                               <div className="flex items-center space-x-4 mt-1">
                                 <Button variant="ghost" size="xs">Like</Button>
                               </div>
