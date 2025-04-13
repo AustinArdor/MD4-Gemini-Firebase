@@ -230,6 +230,12 @@ const ProjectPage: React.FC = () => {
         }
     };
 
+    const dateFormat = new Intl.DateTimeFormat('en-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-2">
@@ -437,7 +443,9 @@ const ProjectPage: React.FC = () => {
 
           <div className="flex justify-center items-center mb-2">
               <Button variant="outline" size="icon" onClick={goToPrevious90Days}><ChevronLeft /></Button>
-              <h3 className="mx-4 text-lg font-semibold">{(new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000))).toLocaleDateString('en-CA')} - {currentDate.toLocaleDateString('en-CA')}</h3>
+              <h3 className="mx-4 text-lg font-semibold">
+                  {dateFormat.format(new Date(currentDate.getTime() - (90 * 24 * 60 * 60 * 1000)))} - {dateFormat.format(currentDate)}
+              </h3>
               <Button variant="outline" size="icon" onClick={goToNext90Days} disabled={new Date(currentDate.getTime() + (90 * 24 * 60 * 60 * 1000)) > new Date()}><ChevronRight /></Button>
           </div>
           <div className="bg-light-gray p-2 rounded-md">
@@ -468,8 +476,13 @@ const ProjectPage: React.FC = () => {
         </div>
       </main>
 
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <p>Powered by Firebase Studio</p>
+      <footer className="flex items-center justify-center w-full h-12 border-t text-[#d7d0d7] bg-[#344870]">
+          <Link href="/settings" className="text-sm font-medium hover:text-accent text-[#d7d0d7] mr-4">
+              Settings
+          </Link>
+          <Link href="/terms" className="text-sm font-medium hover:text-accent text-[#d7d0d7]">
+              Terms of Service
+          </Link>
       </footer>
     </div>
   );
