@@ -393,7 +393,7 @@ const ProjectPage: React.FC = () => {
         </div>
 
         {projects.length < maxProjects && (
-          <Card className="w-[600px] mt-6 bg-project-card-background text-project-card-foreground">
+          <Card className="w-[600px] mt-6 bg-[#d7d0d7] text-project-card-foreground">
             <CardHeader>
               <CardTitle>Create New Project</CardTitle>
               <CardDescription>Add a new project to your collection.</CardDescription>
